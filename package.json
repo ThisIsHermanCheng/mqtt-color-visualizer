@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://thisishermancheng.github.io/mqtt-color-visualizer",
+  "homepage": "https://thisishermancheng.github.io/",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
