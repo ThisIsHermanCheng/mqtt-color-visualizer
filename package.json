@@ -1,0 +1,31 @@
+{
+  "name": "mqtt-color-visualizer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx}\""
+  },
+  "dependencies": {
+    "javascript-color-gradient": "^2.4.4",
+    "mqtt": "^4.3.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.33.0",
+    "eslint-plugin-react": "^7.32.2",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.3",
+    "prettier-eslint-cli": "^7.1.0",
+    "tailwindcss": "^3.2.4",
+    "vite": "^4.1.0"
+  }
+}
