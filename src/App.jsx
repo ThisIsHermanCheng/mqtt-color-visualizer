@@ -4,18 +4,28 @@ import mqtt from './services/mqtt'
 import Form from './components/Form'
 import RandomBtn from './components/RandomBtn'
 
-const App = () => {
-  const [settings, setSettings] = useState({
-    col: 8,
-    row: 8,
-    max: 100,
-    fromColor: '#E9446A',
-    toColor: '#3F2CAF',
-    broker: 'ws://broker.emqx.io:8083/mqtt',
-    topic: 'mqtt-color',
-    mqttMessageKey: '8x8',
-  })
+function useLocalStorage(key) {
+  const [state, setState] = useState(
+    JSON.parse(localStorage.getItem(key)) ?? {
+      col: 8,
+      row: 8,
+      max: 1000,
+      fromColor: '#E9446A',
+      toColor: '#3F2CAF',
+      broker: 'ws://broker.emqx.io:8083/mqtt',
+      topic: 'mqtt-color',
+      mqttMessageKey: '8x8',
+    }
+  )
+  function setStorage(item) {
+    localStorage.setItem(key, JSON.stringify(item))
+    setState(item)
+  }
+  return [state, setStorage]
+}
 
+const App = () => {
+  const [settings, setSettings] = useLocalStorage('settings')
   const [temperature, setTemperature] = useState(
     Array.from(
       { length: settings.max },
@@ -23,21 +33,16 @@ const App = () => {
     )
   )
 
-  useEffect(() => {
+  const handleSettingsChange = (newSwttings) => {
+    setSettings(newSwttings)
     setTemperature(
       Array.from(
-        { length: settings.max },
-        (_, i) => parseInt(settings.max / (settings.col * settings.row)) * i
+        { length: newSwttings.max },
+        (_, i) =>
+          parseInt(newSwttings.max / (newSwttings.col * newSwttings.row)) * i
       )
     )
-  }, [settings])
-
-  useEffect(() => {
-    const settingInLocal = window.localStorage.getItem('settings')
-    if (settingInLocal) {
-      setSettings(JSON.parse(settingInLocal))
-    }
-  }, [])
+  }
 
   useEffect(() => {
     mqtt.setClient({ broker: settings.broker, topic: settings.topic })
@@ -55,11 +60,7 @@ const App = () => {
       <div className="flex flex-col items-center">
         <div className="text-2xl font-bold">Mqtt Color Visualizer</div>
         <div className="mb-4">
-          <Form
-            setSettings={setSettings}
-            settings={settings}
-            key={settings.col}
-          ></Form>
+          <Form setSettings={handleSettingsChange} settings={settings}></Form>
         </div>
         <div>
           <SquareDisplay

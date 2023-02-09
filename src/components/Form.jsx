@@ -14,7 +14,6 @@ function Form({ setSettings, settings }) {
 
   const sumbitHandler = (event) => {
     event.preventDefault()
-    window.localStorage.setItem('settings', JSON.stringify(formData))
     setSettings(formData)
   }
 
