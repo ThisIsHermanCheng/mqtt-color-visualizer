@@ -8,11 +8,11 @@ const App = () => {
   const [settings, setSettings] = useState({
     col: 8,
     row: 8,
-    max: 1000,
+    max: 100,
     fromColor: '#E9446A',
     toColor: '#3F2CAF',
-    broker: 'ws://192.168.8.104:8083/mqtt',
-    topic: 'test',
+    broker: 'ws://broker.emqx.io:8083/mqtt',
+    topic: 'mqtt-color',
     mqttMessageKey: '8x8',
   })
 
@@ -53,6 +53,7 @@ const App = () => {
   return (
     <div className="">
       <div className="flex flex-col items-center">
+        <div className="text-2xl font-bold">Mqtt Color Visualizer</div>
         <div className="mb-4">
           <Form
             setSettings={setSettings}
