@@ -3,6 +3,7 @@ import SquareDisplay from './components/SquareGroup'
 import mqtt from './services/mqtt'
 import Form from './components/Form'
 import RandomBtn from './components/RandomBtn'
+import { make } from 'binary-bmp'
 
 function useLocalStorage(key) {
   const [state, setState] = useState(
@@ -26,6 +27,7 @@ function useLocalStorage(key) {
 
 const App = () => {
   const [settings, setSettings] = useLocalStorage('settings')
+  const [bmp, setBmp] = useState('hihi')
   const [temperature, setTemperature] = useState(
     Array.from(
       { length: settings.max },
@@ -43,6 +45,7 @@ const App = () => {
       )
     )
   }
+  console.log('#dda13a', bmp)
 
   useEffect(() => {
     mqtt.setClient({ broker: settings.broker, topic: settings.topic })
@@ -51,9 +54,23 @@ const App = () => {
       const raw = JSON.parse(message.toString())
       const data = raw[settings.mqttMessageKey]
       data.map((item) => parseInt(item, 10))
+      const image = make({
+        bits: Math.ceil(Math.log2(settings.max)),
+        width: settings.row,
+        height: settings.col,
+        data: data,
+      })
+      console.log('#7fb55b', image)
+      setBmp(image)
       setTemperature(data)
+      console.log('#c6bd85', data, image)
     })
   }, [settings.broker, settings.topic, settings.mqttMessageKey])
+
+  function objectURL(uint8array) {
+    const blob = new Blob([uint8array], { type: 'image/bmp' })
+    return URL.createObjectURL(blob)
+  }
 
   return (
     <div className="">
@@ -76,6 +93,11 @@ const App = () => {
           settings={settings}
           setTemperature={setTemperature}
         ></RandomBtn>
+        <img src={objectURL(bmp)} width="600px"></img>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     </div>
   )
